@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.umd.min.js"></script>
+    <style>
+      table {
+        border: 1px solid black;
+      }
+      td:nth-child(2) {
+        border-left: 1px solid black;
+      }
+      thead > tr > td {
+        border-bottom: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      Copy the link <pre>https://itch.io/jam/323470/entries.json</pre>
+    </p>
+    <p>
+      Then click on "Browse..." and paste the url, after the file is downloaded, click "Generate Data".
+    </p>
+    <input id="file" type="file">
+    <br>
+    <button onclick="readFile()">Generate Data</button>
+    <div id="needData" style="visibility: hidden;">
+      <p id="date"></p>
+      <p id="gameCount"></p>
+      <p id="medianMessage"></p>
+      <label>Enter game's jam id (number at the end of the url of your rating page) for more info: </label><input id="gameId" type="text"><button onclick="populateGameInfo()">Submit</button>
+      <p id="game"></p>
+      <table>
+        <thead>
+          <tr><td>Percentile</td><td>Number of Ratings</td></tr>
+        </thead>
+        <tbody id="tableBody">
+
+        </tbody>
+      </table>
+      <canvas id="myChart" style="width:100%;max-width:1920px"></canvas>
+    </div>
+
+    <script src="./index.js" ></script>
+  </body>
+</html>
