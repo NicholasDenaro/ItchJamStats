@@ -112,6 +112,22 @@ function loadFromFile(rawDat) {
   const p95 = games[Math.floor(games.length * 5 / 100)].rating_count;
   const p99 = games[Math.floor(games.length * 1 / 100)].rating_count;
   const pt10 = games[10].rating_count;
+  
+  const p10Web = gamesWeb[Math.floor(gamesWeb.length * 9 / 10)].rating_count;
+  const p25Web = gamesWeb[Math.floor(gamesWeb.length * 3 / 4)].rating_count;
+  const p75Web = gamesWeb[Math.floor(gamesWeb.length * 1 / 4)].rating_count;
+  const p90Web = gamesWeb[Math.floor(gamesWeb.length * 1 / 10)].rating_count;
+  const p95Web = gamesWeb[Math.floor(gamesWeb.length * 5 / 100)].rating_count;
+  const p99Web = gamesWeb[Math.floor(gamesWeb.length * 1 / 100)].rating_count;
+  const pt10Web = gamesWeb[10].rating_count;
+  
+  const p10NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 9 / 10)].rating_count;
+  const p25NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 3 / 4)].rating_count;
+  const p75NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 4)].rating_count;
+  const p90NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 10)].rating_count;
+  const p95NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 5 / 100)].rating_count;
+  const p99NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 100)].rating_count;
+  const pt10NonWeb = gamesNonWeb[10].rating_count;
 
   let count = 0;
   for (let i = Math.floor(games.length / 2) ; i >= 0; i--) {
@@ -237,6 +253,249 @@ function loadFromFile(rawDat) {
           type: 'bar',
           label: 'top 10',
           data: [{ x: pt10, y: density.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#000',
+          backgroundColor: '#333',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      scales: {
+        x: {
+          display: true,
+          type: 'logarithmic'
+        },
+        y: {
+          display: true
+        },
+      },
+      elements: {
+        point: {
+          radius: 2
+        }
+      }
+    }
+  });
+
+  myChartWeb = new Chart("myChartWeb", {
+    data: {
+      labels: densityWeb.map((v, i) => i),
+      datasets: [
+        {
+          type: 'line',
+          label: '# of Ratings on Webgames',
+          data: densityWeb,
+          fill: true,
+          tension: 0.1,
+          borderColor: '#C7C8',
+          backgroundColor: '#C7C8'
+        },
+        {
+          type: 'bar',
+          label: '10%',
+          data: [{ x: p10Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#600',
+          backgroundColor: '#F00',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '25%',
+          data: [{ x: p25Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#D50',
+          backgroundColor: '#F80',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: 'Median (50%)',
+          data: [{ x: medianWeb, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#AA0',
+          backgroundColor: '#FF0',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '75%',
+          data: [{ x: p75Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#030',
+          backgroundColor: '#290',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '90%',
+          data: [{ x: p90Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#04A',
+          backgroundColor: '#29F',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '95%',
+          data: [{ x: p95Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#20A',
+          backgroundColor: '#80F',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '99%',
+          data: [{ x: p99Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#333',
+          backgroundColor: '#888',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: 'top 10',
+          data: [{ x: pt10Web, y: densityWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#000',
+          backgroundColor: '#333',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      scales: {
+        x: {
+          display: true,
+          type: 'logarithmic'
+        },
+        y: {
+          display: true
+        },
+      },
+      elements: {
+        point: {
+          radius: 2
+        }
+      }
+    }
+  });
+  
+
+  myChartNonWeb = new Chart("myChartNonWeb", {
+    data: {
+      labels: densityNonWeb.map((v, i) => i),
+      datasets: [
+        {
+          type: 'line',
+          label: '# of Ratings on Webgames',
+          data: densityNonWeb,
+          fill: true,
+          tension: 0.1,
+          borderColor: '#C7C8',
+          backgroundColor: '#C7C8'
+        },
+        {
+          type: 'bar',
+          label: '10%',
+          data: [{ x: p10NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#600',
+          backgroundColor: '#F00',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '25%',
+          data: [{ x: p25NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#D50',
+          backgroundColor: '#F80',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: 'Median (50%)',
+          data: [{ x: medianNonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#AA0',
+          backgroundColor: '#FF0',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '75%',
+          data: [{ x: p75NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#030',
+          backgroundColor: '#290',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '90%',
+          data: [{ x: p90NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#04A',
+          backgroundColor: '#29F',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '95%',
+          data: [{ x: p95NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#20A',
+          backgroundColor: '#80F',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: '99%',
+          data: [{ x: p99NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
+          fill: true,
+          tension: 0.1,
+          barThickness: lineThickness,
+          borderColor: '#333',
+          backgroundColor: '#888',
+          borderWidth: 1
+        },
+        {
+          type: 'bar',
+          label: 'top 10',
+          data: [{ x: pt10NonWeb, y: densityNonWeb.reduce((p, c) => p > c ? p : c) * 1.1 }],
           fill: true,
           tension: 0.1,
           barThickness: lineThickness,
