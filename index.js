@@ -266,6 +266,8 @@ function loadFromFile(rawDat) {
 }
 
 let myChart;
+let myChartWeb;
+let myChartNonWeb;
 
 function addRow(tableId, percentile, value) {
   const row = document.createElement('tr');
