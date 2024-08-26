@@ -108,11 +108,11 @@ function loadFromFile(rawDat) {
     density[i] = density[i] ?? 0;
   }
   
-  for (let i = 0; i < densityWeb.length; i++) {
+  for (let i = 0; i < density.length; i++) {
     densityWeb[i] = densityWeb[i] ?? 0;
   }
   
-  for (let i = 0; i < densityNonWeb.length; i++) {
+  for (let i = 0; i < density.length; i++) {
     densityNonWeb[i] = densityNonWeb[i] ?? 0;
   }
 
