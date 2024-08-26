@@ -22,8 +22,8 @@ function loadFromFile(rawDat) {
 
   console.log(games);
 
-  gamesWeb = games.filter(game => game.game?.platform.some(plat => plat === 'web'));
-  gamesNonWeb = games.filter(game => !game.game?.platform.some(plat => plat === 'web'));
+  gamesWeb = games.filter(game => game.game.platforms.some(plat => plat === 'web'));
+  gamesNonWeb = games.filter(game => !game.game.platforms.some(plat => plat === 'web'));
 
   const median = games[Math.floor(games.length * 1 / 2)].rating_count;
   const medianWeb = gamesWeb[Math.floor(gamesWeb.length * 1 / 2)].rating_count;
@@ -45,7 +45,8 @@ function loadFromFile(rawDat) {
   if (myChartNonWeb) {
     myChartNonWeb.destroy();
   }
-  
+
+  // overall
   addRow('tableBody', ` top 1:`,`${games[0].rating_count}`);
   addRow('tableBody', `top 10:`,`${games[10].rating_count}`);
   addRow('tableBody', `   99%:`,`${games[Math.floor(games.length * 1 / 100)].rating_count}`);
@@ -56,6 +57,30 @@ function loadFromFile(rawDat) {
   addRow('tableBody', `   25%:`,`${games[Math.floor(games.length * 3 / 4)].rating_count}`);
   addRow('tableBody', `   10%:`,`${games[Math.floor(games.length * 9 / 10)].rating_count}`);
   addRow('tableBody', `    0%:`,`${games[Math.floor(games.length - 1)].rating_count}`);
+
+  // web
+  addRow('tableBodyWeb', ` top 1:`,`${gamesWeb[0].rating_count}`);
+  addRow('tableBodyWeb', `top 10:`,`${gamesWeb[10].rating_count}`);
+  addRow('tableBodyWeb', `   99%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 100)].rating_count}`);
+  addRow('tableBodyWeb', `   95%:`,`${gamesWeb[Math.floor(gamesWeb.length * 5 / 100)].rating_count}`);
+  addRow('tableBodyWeb', `   90%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 10)].rating_count}`);
+  addRow('tableBodyWeb', `   75%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 4)].rating_count}`);
+  addRow('tableBodyWeb', `   50%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 2)].rating_count}`);
+  addRow('tableBodyWeb', `   25%:`,`${gamesWeb[Math.floor(gamesWeb.length * 3 / 4)].rating_count}`);
+  addRow('tableBodyWeb', `   10%:`,`${gamesWeb[Math.floor(gamesWeb.length * 9 / 10)].rating_count}`);
+  addRow('tableBodyWeb', `    0%:`,`${gamesWeb[Math.floor(gamesWeb.length - 1)].rating_count}`);
+
+  // non-web
+  addRow('tableBodyNonWeb', ` top 1:`,`${gamesNonWeb[0].rating_count}`);
+  addRow('tableBodyNonWeb', `top 10:`,`${gamesNonWeb[10].rating_count}`);
+  addRow('tableBodyNonWeb', `   99%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 100)].rating_count}`);
+  addRow('tableBodyNonWeb', `   95%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 5 / 100)].rating_count}`);
+  addRow('tableBodyNonWeb', `   90%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 10)].rating_count}`);
+  addRow('tableBodyNonWeb', `   75%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 4)].rating_count}`);
+  addRow('tableBodyNonWeb', `   50%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 2)].rating_count}`);
+  addRow('tableBodyNonWeb', `   25%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 3 / 4)].rating_count}`);
+  addRow('tableBodyNonWeb', `   10%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 9 / 10)].rating_count}`);
+  addRow('tableBodyNonWeb', `    0%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length - 1)].rating_count}`);
 
   const density = [];
 
