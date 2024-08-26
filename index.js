@@ -104,6 +104,17 @@ function loadFromFile(rawDat) {
   });
   console.log(densityNonWeb);
 
+  for (let i = 0; i < games.length; i++) {
+    games[i] = games[i] ?? 0;
+  }
+  
+  for (let i = 0; i < gamesWeb.length; i++) {
+    gamesWeb[i] = gamesWeb[i] ?? 0;
+  }
+  
+  for (let i = 0; i < gamesNonWeb.length; i++) {
+    gamesNonWeb[i] = gamesNonWeb[i] ?? 0;
+  }
 
   const p10 = games[Math.floor(games.length * 9 / 10)].rating_count;
   const p25 = games[Math.floor(games.length * 3 / 4)].rating_count;
@@ -412,8 +423,8 @@ function loadFromFile(rawDat) {
           data: densityNonWeb,
           fill: true,
           tension: 0.1,
-          borderColor: '#C7C8',
-          backgroundColor: '#C7C8'
+          borderColor: '#C738',
+          backgroundColor: '#C738'
         },
         {
           type: 'bar',
