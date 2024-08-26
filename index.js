@@ -103,17 +103,17 @@ function loadFromFile(rawDat) {
     densityNonWeb[game.rating_count]++;
   });
   console.log(densityNonWeb);
-
-  for (let i = 0; i < games.length; i++) {
-    games[i] = games[i] ?? 0;
+  
+  for (let i = 0; i < density.length; i++) {
+    density[i] = density[i] ?? 0;
   }
   
-  for (let i = 0; i < gamesWeb.length; i++) {
-    gamesWeb[i] = gamesWeb[i] ?? 0;
+  for (let i = 0; i < densityWeb.length; i++) {
+    densityWeb[i] = densityWeb[i] ?? 0;
   }
   
-  for (let i = 0; i < gamesNonWeb.length; i++) {
-    gamesNonWeb[i] = gamesNonWeb[i] ?? 0;
+  for (let i = 0; i < densityNonWeb.length; i++) {
+    densityNonWeb[i] = densityNonWeb[i] ?? 0;
   }
 
   const p10 = games[Math.floor(games.length * 9 / 10)].rating_count;
