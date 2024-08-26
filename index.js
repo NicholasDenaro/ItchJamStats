@@ -103,18 +103,15 @@ function loadFromFile(rawDat) {
     densityNonWeb[game.rating_count]++;
   });
   console.log(densityNonWeb);
+
+  const first = density.findIndex(d => d > 0);
+  const last = density.length - 1;
   
-  for (let i = 0; i < density.length; i++) {
-    density[i] = density[i] ?? 0;
-  }
-  
-  for (let i = 0; i < density.length; i++) {
-    densityWeb[i] = densityWeb[i] ?? 0;
-  }
-  
-  for (let i = 0; i < density.length; i++) {
-    densityNonWeb[i] = densityNonWeb[i] ?? 0;
-  }
+  densityWeb[first] = densityWeb[first] ?? 0;
+  densityWeb[last] = densityWeb[last] ?? 0;
+
+  densityNonWeb[first] = densityNonWeb[first] ?? 0;
+  densityNonWeb[last] = densityNonWeb[last] ?? 0;
 
   const p10 = games[Math.floor(games.length * 9 / 10)].rating_count;
   const p25 = games[Math.floor(games.length * 3 / 4)].rating_count;
