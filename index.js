@@ -20,8 +20,10 @@ function loadFromFile(rawDat) {
   games = raw.jam_games;
   games.sort((a, b) => b.rating_count - a.rating_count);
 
-  gamesWeb = games.filter(game => game.game.platform.some(plat => plat === 'web'));
-  gamesNonWeb = games.filter(game => !game.game.platform.some(plat => plat === 'web'));
+  console.log(games);
+
+  gamesWeb = games.filter(game => game.game?.platform.some(plat => plat === 'web'));
+  gamesNonWeb = games.filter(game => !game.game?.platform.some(plat => plat === 'web'));
 
   const median = games[Math.floor(games.length * 1 / 2)].rating_count;
   const medianWeb = gamesWeb[Math.floor(gamesWeb.length * 1 / 2)].rating_count;
