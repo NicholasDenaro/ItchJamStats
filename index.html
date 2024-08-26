@@ -30,15 +30,36 @@
       <p id="medianMessage"></p>
       <label>Enter game's jam id (number at the end of the url of your rating page) for more info: </label><input id="gameId" type="text"><button onclick="populateGameInfo()">Submit</button>
       <p id="game"></p>
+      <h1>Data</h1>
+      <h2>Overall</h2>
       <table>
         <thead>
           <tr><td>Percentile</td><td>Number of Ratings</td></tr>
         </thead>
         <tbody id="tableBody">
-
         </tbody>
       </table>
       <canvas id="myChart" style="width:100%;max-width:1920px"></canvas>
+      
+      <h2>Web</h2>
+      <table>
+        <thead>
+          <tr><td>Percentile</td><td>Number of Ratings</td></tr>
+        </thead>
+        <tbody id="tableBodyWeb">
+        </tbody>
+      </table>
+      <canvas id="myChartWeb" style="width:100%;max-width:1920px"></canvas>
+      
+      <h2>Non-Web</h2>
+      <table>
+        <thead>
+          <tr><td>Percentile</td><td>Number of Ratings</td></tr>
+        </thead>
+        <tbody id="tableBodyNonWeb">
+        </tbody>
+      </table>
+      <canvas id="myChartNonWeb" style="width:100%;max-width:1920px"></canvas>
     </div>
 
     <script src="./index.js" ></script>
