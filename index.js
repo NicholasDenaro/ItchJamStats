@@ -22,8 +22,8 @@ function loadFromFile(rawDat) {
 
   console.log(games);
 
-  gamesWeb = games.filter(game => game.game.platforms.some(plat => plat === 'web'));
-  gamesNonWeb = games.filter(game => !game.game.platforms.some(plat => plat === 'web'));
+  gamesWeb = games.filter(game => game.game.platforms?.some(plat => plat === 'web'));
+  gamesNonWeb = games.filter(game => !game.game.platforms?.some(plat => plat === 'web'));
 
   const median = games[Math.floor(games.length * 1 / 2)].rating_count;
   const medianWeb = gamesWeb[Math.floor(gamesWeb.length * 1 / 2)].rating_count;
