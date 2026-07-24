@@ -15,7 +15,7 @@
     </style>
   </head>
   <body>
-    <p>GMTK Game Jam 2026</p>
+    <h2>GMTK Game Jam 2026</h2>
     <p>
       Copy the link (click to copy) <pre style="cursor:pointer;" onclick="navigator.clipboard.writeText('https://itch.io/jam/390324/entries.json'); this.innerText += ' Copied!'">https://itch.io/jam/390324/entries.json</pre>
     </p>
@@ -34,7 +34,16 @@
       <p id="medianMessage"></p>
       <label>Enter game's jam id (number at the end of the url of your rating page) for more info: </label><input id="gameId" type="text"><button onclick="populateGameInfo()">Submit</button>
       <p id="game"></p>
+      <label>Search by game title: </label><input id="gameSearch" type="text"><button onclick="searchGameInfo()">Search</button>
+      <div style="width: 100%; display: flex; flex-direction: row; overflow-x: scroll; column-gap: 10px;" id="search" class="scroll-horizontal"></div>
+      <div id="searchInfo"></div>
       <h1>Data</h1>
+      <p>
+        These charts are called histograms and show how many games have a given number of ratings.
+      </p>
+      <p>
+        Click on a point to show all the games with that rating.
+      </p>
       <h2>Overall</h2>
       <table>
         <thead>
@@ -44,7 +53,7 @@
         </tbody>
       </table>
       <canvas id="myChart" style="width:100%;max-width:1920px"></canvas>
-      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="all-games"></div>
+      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="all-games" class="scroll-horizontal"></div>
       
       <h2>Web</h2>
       <table>
@@ -55,7 +64,7 @@
         </tbody>
       </table>
       <canvas id="myChartWeb" style="width:100%;max-width:1920px"></canvas>
-      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="web-games"></div>
+      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="web-games" class="scroll-horizontal"></div>
       
       <h2>Non-Web</h2>
       <table>
@@ -66,7 +75,7 @@
         </tbody>
       </table>
       <canvas id="myChartNonWeb" style="width:100%;max-width:1920px"></canvas>
-      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="non-web-games"></div>
+      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="non-web-games" class="scroll-horizontal"></div>
     </div>
 
     <script src="./index.js" ></script>

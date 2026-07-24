@@ -297,16 +297,20 @@ function loadFromFile(rawDat) {
           const label = chart.data.labels[dataIndex];
           const value = chart.data.datasets[datasetIndex].data[dataIndex];
           
-          console.log(`You clicked on:\nLabel: ${label}\nValue: ${value}`);
           const scroller = document.getElementById('all-games');
           scroller.innerHTML = '';
-          for (let game of games.filter(game => game.rating_count === Number(label))) {
+
+          const gamesList = [games, gamesWeb, gamesNonWeb][datasetIndex];
+
+          for (let game of gamesList.filter(game => game.rating_count === Number(label))) {
             const div = document.createElement('div');
             const url = document.createElement('a');
             url.href = `https://itch.io${game.url}`;
             div.appendChild(url);
             const image = document.createElement('img');
             image.src = game.game.cover;
+            image.width = 320;
+            image.height = 240;
             const title = document.createElement('div');
             title.innerText = game.game.title;
             url.appendChild(image);
@@ -448,7 +452,6 @@ function loadFromFile(rawDat) {
           const label = chart.data.labels[dataIndex];
           const value = chart.data.datasets[datasetIndex].data[dataIndex];
 
-          console.log(`You clicked on:\nLabel: ${label}\nValue: ${value}`);
           const scroller = document.getElementById('web-games');
           scroller.innerHTML = '';
           for (let game of gamesWeb.filter(game => game.rating_count === Number(label))) {
@@ -458,6 +461,8 @@ function loadFromFile(rawDat) {
             div.appendChild(url);
             const image = document.createElement('img');
             image.src = game.game.cover;
+            image.width = 320;
+            image.height = 240;
             const title = document.createElement('div');
             title.innerText = game.game.title;
             url.appendChild(image);
@@ -600,7 +605,6 @@ function loadFromFile(rawDat) {
           const label = chart.data.labels[dataIndex];
           const value = chart.data.datasets[datasetIndex].data[dataIndex];
 
-          console.log(`You clicked on:\nLabel: ${label}\nValue: ${value}`);
           const scroller = document.getElementById('non-web-games');
           scroller.innerHTML = '';
           for (let game of gamesNonWeb.filter(game => game.rating_count === Number(label))) {
@@ -610,6 +614,8 @@ function loadFromFile(rawDat) {
             div.appendChild(url);
             const image = document.createElement('img');
             image.src = game.game.cover;
+            image.width = 320;
+            image.height = 240;
             const title = document.createElement('div');
             title.innerText = game.game.title;
             url.appendChild(image);
@@ -639,6 +645,70 @@ function addRow(tableId, percentile, value) {
 
 function populateGameInfo() {
   let gameId = document.getElementById('gameId').value;
-  let rank = games.findIndex(element => element.game.id == gameId)
-  document.getElementById('game').innerText = `"${games[rank].game.title}" by ${games[rank].game.user.name} has ${games[rank].rating_count} ratings and is at position: #${rank} which is the ${parseFloat(100 - (rank) * 100 / games.length).toFixed(2) }-percentile`;
+  let rank = games.findIndex(element => element.game.id == gameId);
+  const root = document.getElementById('game');
+  root.innerHTML = '';
+
+  const game = games[rank];
+  const div = document.createElement('div');
+  const url = document.createElement('a');
+  url.href = `https://itch.io${game.url}`;
+  div.appendChild(url);
+  const image = document.createElement('img');
+  image.src = game.game.cover;
+  image.width = 320;
+  image.height = 240;
+  const title = document.createElement('div');
+  title.innerText = game.game.title;
+  url.appendChild(image);
+  url.appendChild(title);
+  root.appendChild(div);
+
+  const info = document.createElement('div');
+  info.innerText = `"${games[rank].game.title}" by ${games[rank].game.user.name} has ${games[rank].rating_count} ratings and is at position: #${rank} which is the ${parseFloat(100 - (rank) * 100 / games.length).toFixed(2)}-percentile for number of ratings`;
+  root.appendChild(info);
 }
+
+function searchGameInfo() {
+  let gameSearch = document.getElementById('gameSearch').value;
+  const regex = new RegExp(gameSearch, 'ig');
+  const gamesFound = games.filter(game => regex.test(game.game.title));
+  const root = document.getElementById('search');
+  root.innerHTML = '';
+
+  for (let game of gamesFound) {
+    const div = document.createElement('div');
+    const url = document.createElement('a');
+    url.href = `https://itch.io${game.url}`;
+    div.appendChild(url);
+    const image = document.createElement('img');
+    image.src = game.game.cover;
+    image.width = 320;
+    image.height = 240;
+    const title = document.createElement('div');
+    title.innerText = game.game.title;
+    url.appendChild(image);
+    url.appendChild(title);
+    root.appendChild(div);
+  }
+  
+  const info = document.createElement('div');
+  info.innerText = `Found ${gamesFound.length} games matching ${regex}.`;
+  const rootInfo = document.getElementById('searchInfo');
+  rootInfo.innerHTML = '';
+  rootInfo.appendChild(info);
+}
+
+
+function scrollHorizontal(elements) {
+  for (let element of elements) {
+    element.addEventListener('wheel', evt => {
+      if (evt.deltaY !== 0) {
+        evt.preventDefault();
+        element.scrollLeft += evt.deltaY;
+      }
+    });
+  }
+}
+
+scrollHorizontal(document.getElementsByClassName('scroll-horizontal'));
