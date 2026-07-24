@@ -17,10 +17,13 @@
   <body>
     <p>GMTK Game Jam 2026</p>
     <p>
-      Copy the link (click to copy) <pre style="cursor:pointer;" onclick="navigator.clipboard.writeText('https://itch.io/jam/390324/entries.json')">https://itch.io/jam/390324/entries.json</pre>
+      Copy the link (click to copy) <pre style="cursor:pointer;" onclick="navigator.clipboard.writeText('https://itch.io/jam/390324/entries.json'); this.innerText += ' Copied!'">https://itch.io/jam/390324/entries.json</pre>
     </p>
     <p>
       Then click on "Browse..." and paste the url, after the file is downloaded, it will show that a file has been selected, then click "Generate Data".
+    </p>
+    <p>
+      Click on a point in the graph to display the games that have that number of ratings
     </p>
     <input id="file" type="file">
     <br>
@@ -41,6 +44,7 @@
         </tbody>
       </table>
       <canvas id="myChart" style="width:100%;max-width:1920px"></canvas>
+      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="all-games"></div>
       
       <h2>Web</h2>
       <table>
@@ -51,6 +55,7 @@
         </tbody>
       </table>
       <canvas id="myChartWeb" style="width:100%;max-width:1920px"></canvas>
+      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="web-games"></div>
       
       <h2>Non-Web</h2>
       <table>
@@ -61,6 +66,7 @@
         </tbody>
       </table>
       <canvas id="myChartNonWeb" style="width:100%;max-width:1920px"></canvas>
+      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="non-web-games"></div>
     </div>
 
     <script src="./index.js" ></script>

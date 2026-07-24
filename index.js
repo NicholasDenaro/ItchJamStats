@@ -284,6 +284,36 @@ function loadFromFile(rawDat) {
         point: {
           radius: 2
         }
+      },
+      onClick: (event, activeElements, chart) => {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+            
+        if (points.length > 0) {
+          const firstPoint = points[0];
+          
+          const datasetIndex = firstPoint.datasetIndex;
+          const dataIndex = firstPoint.index;
+          
+          const label = chart.data.labels[dataIndex];
+          const value = chart.data.datasets[datasetIndex].data[dataIndex];
+          
+          console.log(`You clicked on:\nLabel: ${label}\nValue: ${value}`);
+          const scroller = document.getElementById('all-games');
+          scroller.innerHTML = '';
+          for (let game of games.filter(game => game.rating_count === Number(label))) {
+            const div = document.createElement('div');
+            const url = document.createElement('a');
+            url.href = `https://itch.io${game.url}`;
+            div.appendChild(url);
+            const image = document.createElement('img');
+            image.src = game.game.cover;
+            const title = document.createElement('div');
+            title.innerText = game.game.title;
+            url.appendChild(image);
+            url.appendChild(title);
+            scroller.appendChild(div);
+          }
+        }
       }
     }
   });
@@ -404,6 +434,36 @@ function loadFromFile(rawDat) {
       elements: {
         point: {
           radius: 2
+        }
+      },
+      onClick: (event, activeElements, chart) => {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+        if (points.length > 0) {
+          const firstPoint = points[0];
+
+          const datasetIndex = firstPoint.datasetIndex;
+          const dataIndex = firstPoint.index;
+
+          const label = chart.data.labels[dataIndex];
+          const value = chart.data.datasets[datasetIndex].data[dataIndex];
+
+          console.log(`You clicked on:\nLabel: ${label}\nValue: ${value}`);
+          const scroller = document.getElementById('web-games');
+          scroller.innerHTML = '';
+          for (let game of gamesWeb.filter(game => game.rating_count === Number(label))) {
+            const div = document.createElement('div');
+            const url = document.createElement('a');
+            url.href = `https://itch.io${game.url}`;
+            div.appendChild(url);
+            const image = document.createElement('img');
+            image.src = game.game.cover;
+            const title = document.createElement('div');
+            title.innerText = game.game.title;
+            url.appendChild(image);
+            url.appendChild(title);
+            scroller.appendChild(div);
+          }
         }
       }
     }
@@ -526,6 +586,36 @@ function loadFromFile(rawDat) {
       elements: {
         point: {
           radius: 2
+        }
+      },
+      onClick: (event, activeElements, chart) => {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+        if (points.length > 0) {
+          const firstPoint = points[0];
+
+          const datasetIndex = firstPoint.datasetIndex;
+          const dataIndex = firstPoint.index;
+
+          const label = chart.data.labels[dataIndex];
+          const value = chart.data.datasets[datasetIndex].data[dataIndex];
+
+          console.log(`You clicked on:\nLabel: ${label}\nValue: ${value}`);
+          const scroller = document.getElementById('non-web-games');
+          scroller.innerHTML = '';
+          for (let game of gamesNonWeb.filter(game => game.rating_count === Number(label))) {
+            const div = document.createElement('div');
+            const url = document.createElement('a');
+            url.href = `https://itch.io${game.url}`;
+            div.appendChild(url);
+            const image = document.createElement('img');
+            image.src = game.game.cover;
+            const title = document.createElement('div');
+            title.innerText = game.game.title;
+            url.appendChild(image);
+            url.appendChild(title);
+            scroller.appendChild(div);
+          }
         }
       }
     }
