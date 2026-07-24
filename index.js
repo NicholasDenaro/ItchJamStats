@@ -1,9 +1,20 @@
-function readFile() {
-  
+function readFromStorage() {
+  const jamSelector = document.getElementById('jam-selector');
+  const latestId = document.getElementById('latest-id');
+  const data = window.localStorage.getItem(`jam.${jamSelector.options[jamSelector.selectedIndex].innerHTML}`);
+  if (data) {
+    loadFromFile(data);
+  }
+}
+
+function readFile() {  
   const reader = new FileReader();
   reader.onload = (e) => {
     const rawData = e.target.result.split(',')[1];
     loadFromFile(atob(rawData));
+    const jamSelector = document.getElementById('jam-selector');
+    window.localStorage.setItem(`jam.${jamSelector.options[jamSelector.selectedIndex].innerHTML}`, atob(rawData));
+    document.getElementById('file').value = '';
   }
 
   const fileInput = document.getElementById('file');
@@ -46,41 +57,27 @@ function loadFromFile(rawDat) {
     myChartNonWeb.destroy();
   }
 
+  function addRowsFromList(id, list) {
+    addRow(id, ` top 1:`, `${list[0].rating_count}`, list.filter(game => game.rating_count >= list[0].rating_count).length);
+    addRow(id, `top 10:`, `${list[9].rating_count}`, list.filter(game => game.rating_count < list[0].rating_count && game.rating_count >= list[9].rating_count).length);
+    addRow(id, `   99%:`, `${list[Math.floor(list.length * 1 / 100)].rating_count}`, list.filter(game => game.rating_count < list[9].rating_count && game.rating_count >= list[Math.floor(list.length * 1 / 100)].rating_count).length + ' (99% - top 10)');
+    addRow(id, `   95%:`, `${list[Math.floor(list.length * 5 / 100)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 1 / 100)].rating_count && game.rating_count >= list[Math.floor(list.length * 5 / 100)].rating_count).length + ' (95% - 99%)');
+    addRow(id, `   90%:`, `${list[Math.floor(list.length * 1 / 10)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 5 / 100)].rating_count && game.rating_count >= list[Math.floor(list.length * 1 / 10)].rating_count).length + ' (90% - 95%)');
+    addRow(id, `   75%:`, `${list[Math.floor(list.length * 1 / 4)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 1 / 10)].rating_count && game.rating_count >= list[Math.floor(list.length * 1 / 4)].rating_count).length + ' (75% - 90%)');
+    addRow(id, `   50%:`, `${list[Math.floor(list.length * 1 / 2)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 1 / 4)].rating_count && game.rating_count >= list[Math.floor(list.length * 1 / 2)].rating_count).length + ' (50% - 75%)');
+    addRow(id, `   25%:`, `${list[Math.floor(list.length * 3 / 4)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 1 / 2)].rating_count && game.rating_count >= list[Math.floor(list.length * 3 / 4)].rating_count).length + ' (25% - 50%)');
+    addRow(id, `   10%:`, `${list[Math.floor(list.length * 9 / 10)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 3 / 4)].rating_count && game.rating_count >= list[Math.floor(list.length * 9 / 10)].rating_count).length + ' (10% - 25%)');
+    addRow(id, `    0%:`, `${list[Math.floor(list.length - 1)].rating_count}`, list.filter(game => game.rating_count < list[Math.floor(list.length * 9 / 10)].rating_count && game.rating_count >= list[Math.floor(list.length - 1)].rating_count).length + ' (0% - 10%)');
+  }
+
   // overall
-  addRow('tableBody', ` top 1:`,`${games[0].rating_count}`);
-  addRow('tableBody', `top 10:`,`${games[10].rating_count}`);
-  addRow('tableBody', `   99%:`,`${games[Math.floor(games.length * 1 / 100)].rating_count}`);
-  addRow('tableBody', `   95%:`,`${games[Math.floor(games.length * 5 / 100)].rating_count}`);
-  addRow('tableBody', `   90%:`,`${games[Math.floor(games.length * 1 / 10)].rating_count}`);
-  addRow('tableBody', `   75%:`,`${games[Math.floor(games.length * 1 / 4)].rating_count}`);
-  addRow('tableBody', `   50%:`,`${games[Math.floor(games.length * 1 / 2)].rating_count}`);
-  addRow('tableBody', `   25%:`,`${games[Math.floor(games.length * 3 / 4)].rating_count}`);
-  addRow('tableBody', `   10%:`,`${games[Math.floor(games.length * 9 / 10)].rating_count}`);
-  addRow('tableBody', `    0%:`,`${games[Math.floor(games.length - 1)].rating_count}`);
+  addRowsFromList('tableBody', games);
 
   // web
-  addRow('tableBodyWeb', ` top 1:`,`${gamesWeb[0].rating_count}`);
-  addRow('tableBodyWeb', `top 10:`,`${gamesWeb[10].rating_count}`);
-  addRow('tableBodyWeb', `   99%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 100)].rating_count}`);
-  addRow('tableBodyWeb', `   95%:`,`${gamesWeb[Math.floor(gamesWeb.length * 5 / 100)].rating_count}`);
-  addRow('tableBodyWeb', `   90%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 10)].rating_count}`);
-  addRow('tableBodyWeb', `   75%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 4)].rating_count}`);
-  addRow('tableBodyWeb', `   50%:`,`${gamesWeb[Math.floor(gamesWeb.length * 1 / 2)].rating_count}`);
-  addRow('tableBodyWeb', `   25%:`,`${gamesWeb[Math.floor(gamesWeb.length * 3 / 4)].rating_count}`);
-  addRow('tableBodyWeb', `   10%:`,`${gamesWeb[Math.floor(gamesWeb.length * 9 / 10)].rating_count}`);
-  addRow('tableBodyWeb', `    0%:`,`${gamesWeb[Math.floor(gamesWeb.length - 1)].rating_count}`);
+  addRowsFromList('tableBodyWeb', gamesWeb);
 
   // non-web
-  addRow('tableBodyNonWeb', ` top 1:`,`${gamesNonWeb[0].rating_count}`);
-  addRow('tableBodyNonWeb', `top 10:`,`${gamesNonWeb[10].rating_count}`);
-  addRow('tableBodyNonWeb', `   99%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 100)].rating_count}`);
-  addRow('tableBodyNonWeb', `   95%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 5 / 100)].rating_count}`);
-  addRow('tableBodyNonWeb', `   90%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 10)].rating_count}`);
-  addRow('tableBodyNonWeb', `   75%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 4)].rating_count}`);
-  addRow('tableBodyNonWeb', `   50%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 2)].rating_count}`);
-  addRow('tableBodyNonWeb', `   25%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 3 / 4)].rating_count}`);
-  addRow('tableBodyNonWeb', `   10%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length * 9 / 10)].rating_count}`);
-  addRow('tableBodyNonWeb', `    0%:`,`${gamesNonWeb[Math.floor(gamesNonWeb.length - 1)].rating_count}`);
+  addRowsFromList('tableBodyNonWeb', gamesNonWeb);
 
   const density = [];
 
@@ -119,7 +116,7 @@ function loadFromFile(rawDat) {
   const p90 = games[Math.floor(games.length * 1 / 10)].rating_count;
   const p95 = games[Math.floor(games.length * 5 / 100)].rating_count;
   const p99 = games[Math.floor(games.length * 1 / 100)].rating_count;
-  const pt10 = games[10].rating_count;
+  const pt10 = games[9].rating_count;
   
   const p10Web = gamesWeb[Math.floor(gamesWeb.length * 9 / 10)].rating_count;
   const p25Web = gamesWeb[Math.floor(gamesWeb.length * 3 / 4)].rating_count;
@@ -127,7 +124,7 @@ function loadFromFile(rawDat) {
   const p90Web = gamesWeb[Math.floor(gamesWeb.length * 1 / 10)].rating_count;
   const p95Web = gamesWeb[Math.floor(gamesWeb.length * 5 / 100)].rating_count;
   const p99Web = gamesWeb[Math.floor(gamesWeb.length * 1 / 100)].rating_count;
-  const pt10Web = gamesWeb[10].rating_count;
+  const pt10Web = gamesWeb[9].rating_count;
   
   const p10NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 9 / 10)].rating_count;
   const p25NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 3 / 4)].rating_count;
@@ -135,7 +132,7 @@ function loadFromFile(rawDat) {
   const p90NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 10)].rating_count;
   const p95NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 5 / 100)].rating_count;
   const p99NonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 100)].rating_count;
-  const pt10NonWeb = gamesNonWeb[10].rating_count;
+  const pt10NonWeb = gamesNonWeb[9].rating_count;
 
   let count = 0;
   for (let i = Math.floor(games.length / 2) ; i >= 0; i--) {
@@ -144,6 +141,20 @@ function loadFromFile(rawDat) {
     }
     count++;
   }
+
+  const stats = document.getElementById('overall-stats');
+  stats.innerHTML = '';
+  function addLine(text) {
+    const div = document.createElement('div');
+    div.innerText = text;
+    stats.appendChild(div);
+  }
+
+  addLine(`${games.length} games`);
+  addLine(`${gamesWeb.length} web games`);
+  addLine(`${gamesNonWeb.length} non-web games`);
+  addLine(`${gamesWeb.filter(game => game.rating_count < median).length} (${(gamesWeb.filter(game => game.rating_count < median).length * 100 / gamesWeb.length).toFixed(2)}%) Web games have less than ${median} ratings`);
+  addLine(`${gamesNonWeb.filter(game => game.rating_count < median).length} (${(gamesNonWeb.filter(game => game.rating_count < median).length * 100 / gamesNonWeb.length).toFixed(2)}%) Non-Web games have less than ${median} ratings`);
 
   document.getElementById('medianMessage').innerText = `${count} ratings on ${median}-rating games needed for the median to increase to ${median + 1}`;
 
@@ -155,7 +166,7 @@ function loadFromFile(rawDat) {
       datasets: [
         {
           type: 'line',
-          label: '# of Ratings',
+          label: '# Games with Rating',
           data: density,
           fill: true,
           tension: 0.1,
@@ -164,7 +175,7 @@ function loadFromFile(rawDat) {
         },
         {
           type: 'line',
-          label: '# of Ratings on Webgames',
+          label: '# Web Games with Rating',
           data: densityWeb,
           fill: true,
           tension: 0.1,
@@ -173,7 +184,7 @@ function loadFromFile(rawDat) {
         },
         {
           type: 'line',
-          label: '# of Ratings on Non-Webgames',
+          label: '# Non-Web Games with Rating',
           data: densityNonWeb,
           fill: true,
           tension: 0.1,
@@ -328,7 +339,7 @@ function loadFromFile(rawDat) {
       datasets: [
         {
           type: 'line',
-          label: '# of Ratings on Webgames',
+          label: '# Web Games with Rating',
           data: densityWeb,
           fill: true,
           tension: 0.1,
@@ -481,7 +492,7 @@ function loadFromFile(rawDat) {
       datasets: [
         {
           type: 'line',
-          label: '# of Ratings on Webgames',
+          label: '# Non-Web Games with Rating',
           data: densityNonWeb,
           fill: true,
           tension: 0.1,
@@ -632,14 +643,17 @@ let myChart;
 let myChartWeb;
 let myChartNonWeb;
 
-function addRow(tableId, percentile, value) {
+function addRow(tableId, percentile, value, count) {
   const row = document.createElement('tr');
   const d1 = document.createElement('td');
   d1.innerText = percentile;
   const d2 = document.createElement('td');
   d2.innerText = value;
+  const d3 = document.createElement('td');
+  d3.innerText = count;
   row.appendChild(d1);
   row.appendChild(d2);
+  row.appendChild(d3);
   document.getElementById(tableId).appendChild(row);
 }
 

@@ -15,9 +15,23 @@
     </style>
   </head>
   <body>
-    <h2>GMTK Game Jam 2026</h2>
+    <h2>GMTK Game Jam Statistics</h2>
+    <select id="jam-selector" onchange="document.getElementById('jam-id').innerText = value; document.getElementById('jam-id').onclick=() => {navigator.clipboard.writeText(value); document.getElementById('jam-id').innerText += ' Copied!'}; document.getElementById('needData').style.visibility = 'hidden'; readFromStorage(); ">
+      <option selected value=""></option>
+      <option id="latest-id" value="https://itch.io/jam/390324/entries.json">GMTK Game Jam 2026</option>
+      <option value="https://itch.io/jam/385727/entries.json">GMTK Game Jam 2025</option>
+      <option value="https://itch.io/jam/379683/entries.json">GMTK Game Jam 2024</option>
+      <option value="https://itch.io/jam/323470/entries.json">GMTK Game Jam 2023</option>
+      <option value="https://itch.io/jam/310633/entries.json">GMTK Game Jam 2022</option>
+      <option value="https://itch.io/jam/14786/entries.json">GMTK Game Jam 2021</option>
+      <option value="https://itch.io/jam/11065/entries.json">GMTK Game Jam 2020</option>
+      <option value="https://itch.io/jam/10205/entries.json">GMTK Game Jam 2019</option>
+      <option value="https://itch.io/jam/7102/entries.json">GMTK Game Jam 2018</option>
+      <option value="https://itch.io/jam/4438/entries.json">GMTK Game Jam 2017</option>
+    </select>
     <p>
-      Copy the link (click to copy) <pre style="cursor:pointer;" onclick="navigator.clipboard.writeText('https://itch.io/jam/390324/entries.json'); this.innerText += ' Copied!'">https://itch.io/jam/390324/entries.json</pre>
+      Copy the link (click to copy)
+    <pre id="jam-id" style="cursor:pointer;"></pre>
     </p>
     <p>
       Then click on "Browse..." and paste the url, after the file is downloaded, it will show that a file has been selected, then click "Generate Data".
@@ -45,9 +59,10 @@
         Click on a point to show all the games with that rating.
       </p>
       <h2>Overall</h2>
+      <div id="overall-stats"></div>
       <table>
         <thead>
-          <tr><td>Percentile</td><td>Number of Ratings</td></tr>
+          <tr><td>Percentile</td><td>Number of Ratings</td><td>Number of Games</td></tr>
         </thead>
         <tbody id="tableBody">
         </tbody>
@@ -56,9 +71,10 @@
       <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="all-games" class="scroll-horizontal"></div>
       
       <h2>Web</h2>
+      <div id="web-stats"></div>
       <table>
         <thead>
-          <tr><td>Percentile</td><td>Number of Ratings</td></tr>
+          <tr><td>Percentile</td><td>Number of Ratings</td><td>Number of Games</td></tr>
         </thead>
         <tbody id="tableBodyWeb">
         </tbody>
@@ -67,9 +83,10 @@
       <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="web-games" class="scroll-horizontal"></div>
       
       <h2>Non-Web</h2>
+      <div id="non-web-stats"></div>
       <table>
         <thead>
-          <tr><td>Percentile</td><td>Number of Ratings</td></tr>
+          <tr><td>Percentile</td><td>Number of Ratings</td><td>Number of Games</td></tr>
         </thead>
         <tbody id="tableBodyNonWeb">
         </tbody>
