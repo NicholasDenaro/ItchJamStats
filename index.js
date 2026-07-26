@@ -13,7 +13,7 @@ function readFile() {
     const rawData = e.target.result.split(',')[1];
     loadFromFile(atob(rawData));
     const jamSelector = document.getElementById('jam-selector');
-    window.localStorage.setItem(`jam.${jamSelector.options[jamSelector.selectedIndex].innerHTML}`, atob(rawData));
+    // window.localStorage.setItem(`jam.${jamSelector.options[jamSelector.selectedIndex].innerHTML}`, atob(rawData));
     document.getElementById('file').value = '';
   }
 
@@ -46,6 +46,37 @@ function loadFromFile(rawDat) {
   document.getElementById('tableBody').innerHTML = "";
   document.getElementById('tableBodyWeb').innerHTML = "";
   document.getElementById('tableBodyNonWeb').innerHTML = "";
+
+  const teamStats = document.getElementById('team-stats');
+  const contributorBuckets = games.reduce((prev, cur) => {
+    const contributors = cur.contributors?.length ?? 1;
+    if (!prev[contributors]) {
+      prev[contributors] = 0;
+    }
+
+    prev[contributors]++;
+
+    return prev;
+  }, {});
+
+  [...teamStats.getElementsByTagName('tbody')].at(0).innerHTML = "";
+
+  for (key of Object.keys(contributorBuckets).sort((a, b) => a - b)) {
+    const row = document.createElement('tr');
+    const contr = document.createElement('td');
+    const ga = document.createElement('td');
+    const per = document.createElement('td');
+
+    contr.innerText = key;
+    ga.innerText = contributorBuckets[key];
+    per.innerText = `${Math.round(contributorBuckets[key] * 100 / games.length)}%`;
+
+    row.appendChild(contr);
+    row.appendChild(ga);
+    row.appendChild(per);
+
+    [...teamStats.getElementsByTagName('tbody')].at(0).appendChild(row);
+  }
 
   if (myChart) {
     myChart.destroy();
