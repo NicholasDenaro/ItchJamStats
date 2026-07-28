@@ -9,7 +9,7 @@ async function fetchData() {
   }
   const response = fetch(`https://denaro.dev/itch-jam/${jam}`);
 
-  if (response.stats === 200) {
+  if (response.status === 200) {
     loadFromFile(atob((await response).text()));
   }
 }
