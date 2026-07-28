@@ -1,9 +1,16 @@
-function readFromStorage() {
-  const jamSelector = document.getElementById('jam-selector');
-  const latestId = document.getElementById('latest-id');
-  const data = window.localStorage.getItem(`jam.${jamSelector.options[jamSelector.selectedIndex].innerHTML}`);
-  if (data) {
-    loadFromFile(data);
+let games;
+let gamesWeb;
+let gamesNonWeb;
+
+async function fetchData() {
+  const jam = document.getElementById('jam-selector').value;
+  if (!jam) {
+    return;
+  }
+  const response = fetch(`https://denaro.dev/itch-jam/${jam}`);
+
+  if (response.stats === 200) {
+    loadFromFile(atob((await response).text()));
   }
 }
 
@@ -20,10 +27,6 @@ function readFile() {
   const fileInput = document.getElementById('file');
   reader.readAsDataURL(fileInput.files[0]);
 }
-
-let games;
-let gamesWeb;
-let gamesNonWeb;
 
 function loadFromFile(rawDat) {
   document.getElementById('needData').style.visibility = 'visible';
