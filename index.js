@@ -10,7 +10,7 @@ async function fetchData() {
   const response = await fetch(`https://denaro.dev/itch-jam/${jam}`);
 
   if (response.status === 200) {
-    loadFromFile((await response).text());
+    loadFromFile(await response.text());
   }
 }
 
