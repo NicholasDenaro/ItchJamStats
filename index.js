@@ -713,7 +713,7 @@ function populateGameInfo() {
   root.appendChild(div);
 
   const info = document.createElement('div');
-  info.innerText = `"${games[rank].game.title}" by ${games[rank].game.user.name} has ${games[rank].rating_count} ratings, ${games[rank].coolness} coolness (ratings given to other games), ${games[rank].coolness / games[rank].rating_count} karma (ratio of ratings given to received), and is at position: #${rank} which is the ${parseFloat(100 - (rank) * 100 / games.length).toFixed(2)}-percentile for number of ratings`;
+  info.innerText = `"${games[rank].game.title}" by ${games[rank].game.user.name} has ${games[rank].rating_count} ratings, ${games[rank].coolness} coolness (ratings given to other games), and is at position: #${rank} which is the ${parseFloat(100 - (rank) * 100 / games.length).toFixed(2)}-percentile for number of ratings`;
   root.appendChild(info);
 }
 
