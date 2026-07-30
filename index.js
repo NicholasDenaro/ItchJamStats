@@ -321,6 +321,9 @@ function loadFromFile(rawDat) {
       ]
     },
     options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1920/1080,
       scales: {
         x: {
           display: true,
@@ -476,6 +479,9 @@ function loadFromFile(rawDat) {
       ]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1920/1080,
       scales: {
         x: {
           display: true,
@@ -628,6 +634,9 @@ function loadFromFile(rawDat) {
       ]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1920/1080,
       scales: {
         x: {
           display: true,
@@ -697,6 +706,8 @@ function loadFromFile(rawDat) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1920/1080,
       plugins: {
         tooltip: {
           callbacks: {
@@ -799,6 +810,9 @@ function loadFromFile(rawDat) {
       ]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1920/1080,
       scales: {
         x: {
           display: true
