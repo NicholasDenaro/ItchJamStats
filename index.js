@@ -691,8 +691,6 @@ function loadFromFile(rawDat) {
     ratingCoolnessGames[`${game.coolness},${game.rating_count}`] = (ratingCoolnessGames[`${game.coolness},${game.rating_count}`] || 0) + 1;
   }
 
-  console.log(ratingCoolnessGames);
-
   ratingsCoolnessChart = new Chart("ratingsCoolnessChart", {
     data: {
       datasets: [
@@ -747,6 +745,89 @@ function loadFromFile(rawDat) {
           const scroller = document.getElementById('scatter-games');
           scroller.innerHTML = '';
           for (let game of games.filter(game => game.rating_count === Number(value.y) && game.coolness === Number(value.x))) {
+            const div = document.createElement('div');
+            const url = document.createElement('a');
+            url.href = `https://itch.io${game.url}`;
+            div.appendChild(url);
+            const image = document.createElement('img');
+            image.src = game.game.cover;
+            image.width = 320;
+            image.height = 240;
+            const title = document.createElement('div');
+            title.innerText = game.game.title;
+            url.appendChild(image);
+            url.appendChild(title);
+            scroller.appendChild(div);
+          }
+        }
+      }
+    }
+  });
+
+  for (let game of games) {
+    game.karma = Math.log(1 + game.coolness) - (Math.log(1 + game.rating_count) / Math.log(5));
+  }
+  
+  const ratingKarmaGames = {};
+
+  for (let game of games) {
+    const karmaBucket = game.karma.toFixed(1);
+    ratingKarmaGames[`${karmaBucket},${game.rating_count}`] = (ratingKarmaGames[`${karmaBucket},${game.rating_count}`] || 0) + 1;
+  }
+  
+  ratingsKarmaChart = new Chart("ratingsKarmaChart", {
+    data: {
+      datasets: [
+        {
+          type: 'bubble',
+          label: 'Karma vs Ratings Received',
+          data: Object.entries(ratingKarmaGames).map(e => ({ x: e[0].split(',')[0], y: e[0].split(',')[1], r: 2 + Math.log10(e[1] + 1) * 2, count: e[1] })),
+          backgroundColor: 'rgba(54, 162, 235, 1)',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1920/1080,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const point = context.raw;
+              return `(${point.x}, ${point.y}) - Total Entries: ${point.count}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          display: true,
+          label: 'ratings sent',
+        },
+        y: {
+          display: true,
+          label: 'ratings received',
+          type: 'logarithmic'
+        },
+      },
+      onClick: (event, activeElements, chart) => {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+        if (points.length > 0) {
+          const firstPoint = points[0];
+
+          const datasetIndex = firstPoint.datasetIndex;
+          const dataIndex = firstPoint.index;
+
+          const label = chart.data.labels[dataIndex];
+          const value = chart.data.datasets[datasetIndex].data[dataIndex];
+
+          console.log('value', value);
+
+          const scroller = document.getElementById('karma-games');
+          scroller.innerHTML = '';
+          for (let game of games.filter(game => game.rating_count === Number(value.y) && game.karma.toFixed(1) === value.x)) {
             const div = document.createElement('div');
             const url = document.createElement('a');
             url.href = `https://itch.io${game.url}`;
@@ -882,6 +963,7 @@ let myChartWeb;
 let myChartNonWeb;
 
 let ratingsCoolnessChart;
+let ratingsKarmaChart;
 let brightnessChart;
 
 function addRow(tableId, percentile, value, count) {
@@ -920,7 +1002,7 @@ function populateGameInfo() {
   root.appendChild(div);
 
   const info = document.createElement('div');
-  info.innerText = `"${games[rank].game.title}" by ${games[rank].game.user.name} has ${games[rank].rating_count} ratings, ${games[rank].coolness} coolness (ratings given to other games), and is at position: #${rank} which is the ${parseFloat(100 - (rank) * 100 / games.length).toFixed(2)}-percentile for number of ratings`;
+  info.innerText = `"${games[rank].game.title}" by ${games[rank].game.user.name} has ${games[rank].rating_count} ratings, ${games[rank].coolness} coolness (ratings given to other games), ${games[rank].karma} karma, and is at position: #${rank} which is the ${parseFloat(100 - (rank) * 100 / games.length).toFixed(2)}-percentile for number of ratings`;
   root.appendChild(info);
 }
 
@@ -959,7 +1041,12 @@ function scrollHorizontal(elements) {
   for (let element of elements) {
     element.addEventListener('wheel', evt => {
       if (evt.deltaY !== 0) {
-        evt.preventDefault();
+        if (evt.deltaY >= 0 && element.scrollLeft < element.scrollLeftMax) {
+          evt.preventDefault();
+        }
+        if (evt.deltaY <= 0 && element.scrollLeft > 0) {
+          evt.preventDefault();
+        }
         element.scrollLeft += evt.deltaY;
       }
     });

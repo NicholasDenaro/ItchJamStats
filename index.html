@@ -75,8 +75,9 @@
         <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-2">Web</div>
         <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-3">Non-Web</div>
         <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-4">Coolness vs Ratings</div>
-        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-5">Team Size</div>
-        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-6">Cover Brightness</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-5">Ratings vs Karma</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-6">Team Size</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-7">Cover Brightness</div>
       </div>
       <div style="border: 1px solid;" id="tab-bodies">
         <div id="tab-bodies-1">
@@ -141,6 +142,13 @@
             class="scroll-horizontal"></div>
         </div>
         <div id="tab-bodies-5">
+          <h2>Ratings vs Karma</h2>
+          <div id="ratings-karma-stats"></div>
+          <canvas id="ratingsKarmaChart" style="width:100%;max-width:1920px"></canvas>
+          <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="karma-games"
+            class="scroll-horizontal"></div>
+        </div>
+        <div id="tab-bodies-6">
           <h2>Team Sizes</h2>
           <div id="team-stats">
             <table>
@@ -157,7 +165,7 @@
             </table>
           </div>
         </div>
-        <div id="tab-bodies-6">
+        <div id="tab-bodies-7">
           <div id="">
             <h2>By Cover Brightness</h2>
             <div id="brightness-stats"></div>
