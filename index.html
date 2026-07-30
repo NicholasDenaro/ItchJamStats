@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
     <style>
       table {
         border: 1px solid black;
@@ -16,7 +16,7 @@
   </head>
   <body>
     <h2>GMTK Game Jam Statistics</h2>
-    <select id="jam-selector" onchange="document.getElementById('jam-id').innerText = value; document.getElementById('jam-id').onclick=() => {navigator.clipboard.writeText(value); document.getElementById('jam-id').innerText += ' Copied!'}; document.getElementById('needData').style.visibility = 'hidden';">
+    <select id="jam-selector" onchange="document.getElementById('jam-id').innerText = value; document.getElementById('jam-id').onclick=() => {navigator.clipboard.writeText(`https://itch.io/jam/${value}/entries.json`); document.getElementById('jam-id').innerText += ' Copied!'}; document.getElementById('needData').style.visibility = 'hidden';">
       <option selected value=""></option>
       <option id="latest-id" value="390324">GMTK Game Jam 2026</option>
       <option value="385727">GMTK Game Jam 2025</option>
@@ -34,7 +34,7 @@
     <details>
       <summary>Manual</summary>
       <p>
-      Copy the link (click to copy)
+      Click the Jam Id to copy the link to the clipboard
       <pre id="jam-id" style="cursor:pointer;"></pre>
       </p>
       <p>
@@ -63,61 +63,115 @@
       <div style="width: 100%; display: flex; flex-direction: row; overflow-x: scroll; column-gap: 10px;" id="search" class="scroll-horizontal"></div>
       <div id="searchInfo"></div>
       <h1>Data</h1>
-      <div id="team-stats">
-        <table>
-          <thead>
-            <tr>
-              <td>Number of Contributors</td>
-              <td>Number of Games</td>
-              <td>Percentage</td>
-            </tr>
-          </thead>
-          <tbody>
-      
-          </tbody>
-        </table>
-      </div>
       <p>
         These charts are called histograms and show how many games have a given number of ratings.
       </p>
       <p>
         Click on a point to show all the games with that rating.
       </p>
-      <h2>Overall</h2>
-      <div id="overall-stats"></div>
-      <table>
-        <thead>
-          <tr><td>Percentile</td><td>Number of Ratings</td><td>Number of Games</td></tr>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-      </table>
-      <canvas id="myChart" style="width:100%;max-width:1920px"></canvas>
-      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="all-games" class="scroll-horizontal"></div>
-      
-      <h2>Web</h2>
-      <div id="web-stats"></div>
-      <table>
-        <thead>
-          <tr><td>Percentile</td><td>Number of Ratings</td><td>Number of Games</td></tr>
-        </thead>
-        <tbody id="tableBodyWeb">
-        </tbody>
-      </table>
-      <canvas id="myChartWeb" style="width:100%;max-width:1920px"></canvas>
-      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="web-games" class="scroll-horizontal"></div>
-      
-      <h2>Non-Web</h2>
-      <div id="non-web-stats"></div>
-      <table>
-        <thead>
-          <tr><td>Percentile</td><td>Number of Ratings</td><td>Number of Games</td></tr>
-        </thead>
-        <tbody id="tableBodyNonWeb">
-        </tbody>
-      </table>
-      <canvas id="myChartNonWeb" style="width:100%;max-width:1920px"></canvas>
-      <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="non-web-games" class="scroll-horizontal"></div>
+
+      <div style="display: flex; flex-direction: row; column-gap: 1px; border: 1px solid; width: fit-content" id="tabs">
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-1">Overall</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-2">Web</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-3">Non-Web</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-4">Coolness vs Ratings</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-5">Team Size</div>
+        <div class="tab" style="border: 1px solid; cursor: pointer; padding: 2px;" id="tab-6">Cover Brightness</div>
+      </div>
+      <div style="border: 1px solid;" id="tab-bodies">
+        <div id="tab-bodies-1">
+          <h2>Overall</h2>
+          <div id="overall-stats"></div>
+          <table>
+            <thead>
+              <tr>
+                <td>Percentile</td>
+                <td>Number of Ratings</td>
+                <td>Number of Games</td>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+          </table>
+          <canvas id="myChart" style="width:100%;max-width:1920px"></canvas>
+          <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="all-games"
+            class="scroll-horizontal"></div>
+        </div>
+        <div id="tab-bodies-2">
+          <h2>Web</h2>
+          <div id="web-stats"></div>
+          <table>
+            <thead>
+              <tr>
+                <td>Percentile</td>
+                <td>Number of Ratings</td>
+                <td>Number of Games</td>
+              </tr>
+            </thead>
+            <tbody id="tableBodyWeb">
+            </tbody>
+          </table>
+          <canvas id="myChartWeb" style="width:100%;max-width:1920px"></canvas>
+          <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="web-games"
+            class="scroll-horizontal"></div>
+        </div>
+        <div id="tab-bodies-3">
+          <h2>Non-Web</h2>
+          <div id="non-web-stats"></div>
+          <table>
+            <thead>
+              <tr>
+                <td>Percentile</td>
+                <td>Number of Ratings</td>
+                <td>Number of Games</td>
+              </tr>
+            </thead>
+            <tbody id="tableBodyNonWeb">
+            </tbody>
+          </table>
+          <canvas id="myChartNonWeb" style="width:100%;max-width:1920px"></canvas>
+          <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="non-web-games"
+            class="scroll-horizontal"></div>
+        </div>
+        <div id="tab-bodies-4">
+          <h2>Ratings vs Coolness</h2>
+          <div id="ratings-coolness-stats"></div>
+          <canvas id="ratingsCoolnessChart" style="width:100%;max-width:1920px"></canvas>
+          <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="scatter-games"
+            class="scroll-horizontal"></div>
+        </div>
+        <div id="tab-bodies-5">
+          <h2>Team Sizes</h2>
+          <div id="team-stats">
+            <table>
+              <thead>
+                <tr>
+                  <td>Number of Contributors</td>
+                  <td>Number of Games</td>
+                  <td>Percentage</td>
+                </tr>
+              </thead>
+              <tbody>
+        
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="tab-bodies-6">
+          <div id="">
+            <h2>By Cover Brightness</h2>
+            <div id="brightness-stats"></div>
+            <canvas id="brightnessChart" style="width:100%;max-width:1920px"></canvas>
+            <div style="width: 100%; overflow-x: scroll; display: flex; flex-direction: row; column-gap: 10px;" id="brightness-games"
+              class="scroll-horizontal"></div>
+          </div>
+        </div>
+        <div id="tab-bodies-7">
+          <div id="empty">
+            
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="./index.js" ></script>

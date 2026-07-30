@@ -90,6 +90,9 @@ function loadFromFile(rawDat) {
   if (myChartNonWeb) {
     myChartNonWeb.destroy();
   }
+  if (ratingsCoolnessChart) {
+    ratingsCoolnessChart.destroy();
+  }
 
   function addRowsFromList(id, list) {
     addRow(id, ` top 1:`, `${list[0].rating_count}`, list.filter(game => game.rating_count >= list[0].rating_count).length);
@@ -193,6 +196,8 @@ function loadFromFile(rawDat) {
   document.getElementById('medianMessage').innerText = `${count} ratings on ${median}-rating games needed for the median to increase to ${median + 1}`;
 
   const lineThickness = 5;
+
+  document.getElementById('tab-1').click();
 
   myChart = new Chart("myChart", {
     data: {
@@ -519,7 +524,6 @@ function loadFromFile(rawDat) {
     }
   });
   
-
   myChartNonWeb = new Chart("myChartNonWeb", {
     data: {
       labels: densityNonWeb.map((v, i) => i),
@@ -671,11 +675,200 @@ function loadFromFile(rawDat) {
       }
     }
   });
+
+  const ratingCoolnessGames = {};
+
+  for (let game of games) {
+    ratingCoolnessGames[`${game.coolness},${game.rating_count}`] = (ratingCoolnessGames[`${game.coolness},${game.rating_count}`] || 0) + 1;
+  }
+
+  console.log(ratingCoolnessGames);
+
+  ratingsCoolnessChart = new Chart("ratingsCoolnessChart", {
+    data: {
+      datasets: [
+        {
+          type: 'bubble',
+          label: 'Ratings Sent vs Ratings Received',
+          data: Object.entries(ratingCoolnessGames).map(e => ({ x: e[0].split(',')[0], y: e[0].split(',')[1], r: 2 + Math.log10(e[1] + 1) * 2, count: e[1] })),
+          backgroundColor: 'rgba(54, 162, 235, 1)',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const point = context.raw;
+              return `(${point.x}, ${point.y}) - Total Entries: ${point.count}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          display: true,
+          label: 'ratings sent',
+          type: 'logarithmic',
+        },
+        y: {
+          display: true,
+          label: 'ratings received',
+          type: 'logarithmic'
+        },
+      },
+      onClick: (event, activeElements, chart) => {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+        if (points.length > 0) {
+          const firstPoint = points[0];
+
+          const datasetIndex = firstPoint.datasetIndex;
+          const dataIndex = firstPoint.index;
+
+          const label = chart.data.labels[dataIndex];
+          const value = chart.data.datasets[datasetIndex].data[dataIndex];
+
+          console.log('value', value);
+
+          const scroller = document.getElementById('scatter-games');
+          scroller.innerHTML = '';
+          for (let game of games.filter(game => game.rating_count === Number(value.y) && game.coolness === Number(value.x))) {
+            const div = document.createElement('div');
+            const url = document.createElement('a');
+            url.href = `https://itch.io${game.url}`;
+            div.appendChild(url);
+            const image = document.createElement('img');
+            image.src = game.game.cover;
+            image.width = 320;
+            image.height = 240;
+            const title = document.createElement('div');
+            title.innerText = game.game.title;
+            url.appendChild(image);
+            url.appendChild(title);
+            scroller.appendChild(div);
+          }
+        }
+      }
+    }
+  });
+
+  const brightnessGames = {}
+
+  for (let game of games) {
+    const coverColor = game.game.cover_color?.split('#').at(1) || null;
+    if (coverColor === null) {
+      brightnessGames[-1] = (brightnessGames[-1] || 0) + 1;
+      continue;
+    }
+    const r = parseInt(coverColor.substring(0, 2), 16);
+    const g = parseInt(coverColor.substring(2, 4), 16);
+    const b = parseInt(coverColor.substring(4, 6), 16);
+
+    const brightness = Math.round((r + g + b) / 3);
+
+    if (brightness == Number.NaN) {
+      console.log(game);
+      continue;
+    }
+
+    brightnessGames[brightness] = (brightnessGames[brightness] || 0) + 1;
+  }
+
+  console.log(brightnessGames);
+
+  delete brightnessGames[Number.NaN];
+
+  brightnessChart = new Chart("brightnessChart", {
+    data: {
+      datasets: [
+        {
+          type: 'line',
+          label: '# Games with Brightness',
+          data: Object.entries(brightnessGames).map(e => ({
+            x: e[0],
+            y: e[1]
+          })).sort((a, b) => a.x - b.x),
+          fill: true,
+          tension: 0.1,
+          borderColor: 'rgba(0, 93, 133, 0.53)',
+          backgroundColor: 'rgba(8, 218, 246, 0.53)'
+        }
+      ]
+    },
+    options: {
+      scales: {
+        x: {
+          display: true
+        },
+        y: {
+          display: true,
+          type: 'logarithmic'
+        },
+      },
+      elements: {
+        point: {
+          radius: 2
+        }
+      },
+      onClick: (event, activeElements, chart) => {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+        if (points.length > 0) {
+          const firstPoint = points[0];
+
+          const datasetIndex = firstPoint.datasetIndex;
+          const dataIndex = firstPoint.index;
+
+          const label = chart.data.labels[dataIndex];
+          const value = chart.data.datasets[datasetIndex].data[dataIndex];
+
+          const scroller = document.getElementById('brightness-games');
+          scroller.innerHTML = '';
+
+          const gamesList = [games, gamesWeb, gamesNonWeb][datasetIndex];
+
+          for (let game of gamesList.filter(game => {
+            const coverColor = game.game.cover_color?.split('#').at(1) || null;
+            if (coverColor === null) {
+              return -1 === Number(label);
+            }
+            const r = parseInt(coverColor.substring(0, 2), 16);
+            const g = parseInt(coverColor.substring(2, 4), 16);
+            const b = parseInt(coverColor.substring(4, 6), 16);
+
+            const brightness = Math.round((r + g + b) / 3);
+
+            return brightness === Number(label);
+          })) {
+            const div = document.createElement('div');
+            const url = document.createElement('a');
+            url.href = `https://itch.io${game.url}`;
+            div.appendChild(url);
+            const image = document.createElement('img');
+            image.src = game.game.cover;
+            image.width = 320;
+            image.height = 240;
+            const title = document.createElement('div');
+            title.innerText = game.game.title;
+            url.appendChild(image);
+            url.appendChild(title);
+            scroller.appendChild(div);
+          }
+        }
+      }
+    }
+  });
 }
 
 let myChart;
 let myChartWeb;
 let myChartNonWeb;
+
+let ratingsCoolnessChart;
+let brightnessChart;
 
 function addRow(tableId, percentile, value, count) {
   const row = document.createElement('tr');
@@ -760,3 +953,25 @@ function scrollHorizontal(elements) {
 }
 
 scrollHorizontal(document.getElementsByClassName('scroll-horizontal'));
+
+const tabs = document.getElementById('tabs');
+console.log(tabs);
+
+for (let child of tabs.children) {
+  child.addEventListener('click', (event) => {
+    const id = event.target.id;
+    for (let ch of document.getElementById('tab-bodies').querySelectorAll('*')) {
+      ch.style.visibility = 'hidden';
+      ch.style.margin = 0;
+      ch.style.height = 0;
+    }
+    const tabBody = document.getElementById(`tab-bodies-${id.split('-').at(-1)}`);
+    tabBody.style.visibility = 'visible';
+    tabBody.style.height = 'initial';
+    for (let ch of tabBody.querySelectorAll('*')) {
+      ch.style.visibility = 'visible';
+      ch.style.margin = 'revert';
+      ch.style.height = 'initial';
+    }
+  });
+}
