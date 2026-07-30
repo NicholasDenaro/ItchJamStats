@@ -44,7 +44,7 @@ function loadFromFile(rawDat) {
   const medianNonWeb = gamesNonWeb[Math.floor(gamesNonWeb.length * 1 / 2)].rating_count;
 
   document.getElementById('date').innerText = `Data as of: ${new Date(raw.generated_on * 1000).toLocaleString()} (${new Date(raw.generated_on * 1000).toISOString()})`;
-  document.getElementById('gameCount').innerText = `${games.length} games in the Jam. The median at the time listed above is ${median}`;
+  document.getElementById('gameCount').innerText = `${games.length} games in the Jam with ${games.reduce((prev, cur) => prev + cur.rating_count, 0)} total ratings. The median at the time listed above is ${median}`;
   
   document.getElementById('tableBody').innerHTML = "";
   document.getElementById('tableBodyWeb').innerHTML = "";
