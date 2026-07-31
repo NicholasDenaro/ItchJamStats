@@ -945,7 +945,7 @@ function loadFromFile(rawDat) {
           type: 'logarithmic',
           title: {
             display: true,
-            text: 'Ratings',
+            text: 'Number of Games',
           }
         },
       },
