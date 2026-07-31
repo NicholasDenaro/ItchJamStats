@@ -327,10 +327,18 @@ function loadFromFile(rawDat) {
       scales: {
         x: {
           display: true,
-          type: 'logarithmic'
+          type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Ratings',
+          }
         },
         y: {
-          display: true
+          display: true,
+          title: {
+            display: true,
+            text: 'Number of Games',
+          }
         },
       },
       elements: {
@@ -485,10 +493,18 @@ function loadFromFile(rawDat) {
       scales: {
         x: {
           display: true,
-          type: 'logarithmic'
+          type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Ratings',
+          }
         },
         y: {
-          display: true
+          display: true,
+          title: {
+            display: true,
+            text: 'Number of Games',
+          }
         },
       },
       elements: {
@@ -640,10 +656,18 @@ function loadFromFile(rawDat) {
       scales: {
         x: {
           display: true,
-          type: 'logarithmic'
+          type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Ratings',
+          }
         },
         y: {
-          display: true
+          display: true,
+          title: {
+            display: true,
+            text: 'Number of Games',
+          }
         },
       },
       elements: {
@@ -719,13 +743,20 @@ function loadFromFile(rawDat) {
       scales: {
         x: {
           display: true,
-          label: 'ratings sent',
           type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Coolness',
+          }
         },
         y: {
           display: true,
           label: 'ratings received',
-          type: 'logarithmic'
+          type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Ratings',
+          }
         },
       },
       onClick: (event, activeElements, chart) => {
@@ -803,12 +834,19 @@ function loadFromFile(rawDat) {
       scales: {
         x: {
           display: true,
-          label: 'ratings sent',
+          title: {
+            display: true,
+            text: 'Karma',
+          }
         },
         y: {
           display: true,
           label: 'ratings received',
-          type: 'logarithmic'
+          type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Ratings',
+          }
         },
       },
       onClick: (event, activeElements, chart) => {
@@ -896,11 +934,19 @@ function loadFromFile(rawDat) {
       aspectRatio: 1920/1080,
       scales: {
         x: {
-          display: true
+          display: true,
+          title: {
+            display: true,
+            text: 'Brightness',
+          }
         },
         y: {
           display: true,
-          type: 'logarithmic'
+          type: 'logarithmic',
+          title: {
+            display: true,
+            text: 'Ratings',
+          }
         },
       },
       elements: {
